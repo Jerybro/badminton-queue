@@ -14,18 +14,7 @@ function App() {
     queue4: [[null, null], [null, null]],
     queue5: [[null, null], [null, null]],
     queue6: [[null, null], [null, null]],
-    waiting: [
-      { name: 'Bear Lee', score: 300 },
-      { name: 'Jessica Wang', score: 200 },
-      { name: 'Patrick Tang', score: 400 },
-      { name: 'Chris Wang', score: 500 },
-      { name: 'Linda Lin', score: 300 },
-      { name: 'Wendy Chang', score: 200 },
-      { name: 'Ben Hsiao', score: 100 },
-      { name: 'Evan Chen', score: 600 },
-      { name: '沈大帥', score: 700 },
-      { name: 'Devin Chen', score: 400 }
-    ]
+    waiting: [] // 預設等候區為空
   });
   const [history, setHistory] = useState([]);
   const [redoHistory, setRedoHistory] = useState([]);
@@ -322,6 +311,27 @@ function App() {
     });
   };
 
+  // 新增：一鍵加入季繳常用名單
+  const handleAddSeasonPlayers = () => {
+    const seasonPlayers = [
+      { name: 'Jerry', score: 300 },
+      { name: 'steven', score: 300 },
+      { name: 'denny', score: 300 },
+      { name: '包恩', score: 300 },
+      { name: '阿嘎', score: 300 },
+      { name: '克萊門特', score: 300 }
+    ];
+    updatePlayers(prev => {
+      // 避免重複加入
+      const existNames = prev.waiting.map(p => p.name);
+      const newList = [
+        ...prev.waiting,
+        ...seasonPlayers.filter(p => !existNames.includes(p.name))
+      ];
+      return { ...prev, waiting: newList };
+    });
+  };
+
   return (
     <div className="container" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
       {/* 場地區 + 排隊區 */}
@@ -471,6 +481,7 @@ function App() {
               ))}
             </select>
             <button className="join-btn highlight" style={{ padding: '12px 28px', fontSize: 20, fontWeight: 'bold', boxShadow: '0 2px 12px #8fd19e', background: 'linear-gradient(90deg, #43a047 0%, #8fd19e 100%)', color: '#fff', border: 'none' }} onClick={handleAddToWaiting}>加入排隊</button>
+            <button className="join-btn" style={{ padding: '12px 18px', fontSize: 18, fontWeight: 'bold', background: '#fffbe6', color: '#b8860b', border: '2px solid #ffe082', marginLeft: 4 }} onClick={handleAddSeasonPlayers}>季繳常用名單登記</button>
           </div>
           <div
             className="delete-area"
